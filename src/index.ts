@@ -88,6 +88,3 @@ export async function getCombinedData(playerId: number) {
     return null;
   }
 }
-
-const pl = await getCombinedData(351);
-console.log(pl);
