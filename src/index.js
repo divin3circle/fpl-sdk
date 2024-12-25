@@ -18,7 +18,7 @@ export async function getBootsrapStaticData() {
     }
 }
 /*
- * @notice: Fetcha player’s detailed information divided into 3 section
+ * @notice: Fetch a player’s detailed information divided into 3 section
  * @param: playerId: number
  * @return: Promise<PlayerSummary | null>
  */
@@ -32,7 +32,49 @@ export async function getPlayerSummary(playerId) {
         return null;
     }
 }
-const playerSummary = await getPlayerSummary(351);
-if (playerSummary) {
-    console.log(playerSummary);
+/*
+ * @notice: Fetch player's bootstrap data
+ * @param: playerId: number
+ * @return: Promise<Element | null>
+ */
+export async function getPlayerBootstrapData(playerId) {
+    try {
+        const responseFromBootstrap = await axios.get(`${BASE_URL}bootstrap-static/`);
+        const dataFromBootstrap = responseFromBootstrap.data;
+        const player = dataFromBootstrap.elements.find((player) => player.id === playerId);
+        if (player) {
+            return player;
+        }
+        else {
+            return null;
+        }
+    }
+    catch (error) {
+        console.error(error);
+        return null;
+    }
 }
+/*
+ * @notice: Combines bootstrap & element player data f
+ * @param: playerId: number
+ * @return: Promise<Player | null>
+ */
+export async function getCombinedData(playerId) {
+    try {
+        const bootstrap = await getPlayerBootstrapData(playerId);
+        const elementSummary = await getPlayerSummary(playerId);
+        if (bootstrap && elementSummary) {
+            const player = Object.assign(Object.assign({}, bootstrap), elementSummary);
+            return player;
+        }
+        else {
+            return null;
+        }
+    }
+    catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+const pl = await getCombinedData(351);
+console.log(pl);

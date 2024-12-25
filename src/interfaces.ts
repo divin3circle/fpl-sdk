@@ -359,3 +359,5 @@ export interface PlayerSummary {
   history_past: ElementSummarySeason[];
   fixtures: ElementSummaryUpcomingFixture[];
 }
+
+export interface Player extends Element, PlayerSummary {}
