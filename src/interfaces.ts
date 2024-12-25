@@ -28,6 +28,7 @@ export type ElementStatus = "a" | "u" | "i" | "s" | "n" | "d";
  * ****************************
  */
 
+/************* BOOTSRAP DATA ***********/
 /*
  * @notice: Interface for chip played in a gameweek
  */
@@ -179,7 +180,7 @@ export interface Team {
 }
 
 /*
- * @notice: Phases of FPL season. (not really important)
+ * @notice: Interface of phases of FPL season. (not really important)
  */
 export interface Phase {
   id: number;
@@ -189,7 +190,7 @@ export interface Phase {
 }
 
 /*
- * @notice: The game settings and rules. (not really important)
+ * @notice: Interface for the game's settings and rules. (not really important)
  */
 export interface GameSettings {
   cup_start_event_id: number | null;
@@ -223,7 +224,7 @@ export interface GameSettings {
 }
 
 /*
- * @notice: Information of different types of players in the game
+ * @notice: Interface for different types of players in the game
  * such as Goalkeeper, Defender, Midfielder, Forward
  */
 export interface ElementTypes {
@@ -261,4 +262,100 @@ export interface Bootstrap {
   phases: Phase[];
   teams: Team[];
   total_players: number;
+}
+
+/************* ELEMENT SUMMARY DATA ***********/
+
+/*
+ * @notice: Interface for a player’s remaining fixtures of the season
+ */
+export interface ElementSummaryUpcomingFixture {
+  code: number;
+  difficulty: number;
+  event: number;
+  event_name: string;
+  finished: boolean;
+  id: number;
+  is_home: boolean;
+  kickoff_time: string;
+  minutes: number;
+  provisional_start_time: boolean;
+  team_a: number;
+  team_a_score: number | null;
+  team_h: number;
+  team_h_score: number | null;
+}
+
+/*
+ * @notice:  Interface of player’s previous fixtures and its match stats.
+ */
+export interface ElementSummaryFixture {
+  assists: number;
+  bonus: number;
+  bps: number;
+  clean_sheets: number;
+  creativity: string;
+  element: number;
+  fixture: number;
+  goals_conceded: number;
+  goals_scored: number;
+  ict_index: string;
+  influence: string;
+  kickoff_time: string;
+  minutes: number;
+  opponent_team: number;
+  own_goals: number;
+  penalties_missed: number;
+  penalties_saved: number;
+  red_cards: number;
+  round: number;
+  saves: number;
+  selected: number;
+  team_a_score: number;
+  team_h_score: number;
+  threat: string;
+  total_points: number;
+  transfers_balance: number;
+  transfers_in: number;
+  transfers_out: number;
+  value: number;
+  was_home: boolean;
+  yellow_cards: number;
+}
+
+/*
+ * @notice:  Interface of player’s season stats
+ */
+export interface ElementSummarySeason {
+  assists: number;
+  bonus: number;
+  bps: number;
+  clean_sheets: number;
+  creativity: string;
+  element_code: number;
+  end_cost: number;
+  goals_conceded: number;
+  goals_scored: number;
+  ict_index: string;
+  influence: string;
+  minutes: number;
+  own_goals: number;
+  penalties_missed: number;
+  penalties_saved: number;
+  red_cards: number;
+  saves: number;
+  season_name: string;
+  start_cost: number;
+  threat: string;
+  total_points: number;
+  yellow_cards: number;
+}
+
+/*
+ * @notice: Interface for a player’s detailed information divided into 3 section
+ */
+export interface PlayerSummary {
+  history: ElementSummaryFixture[];
+  history_past: ElementSummarySeason[];
+  fixtures: ElementSummaryUpcomingFixture[];
 }
