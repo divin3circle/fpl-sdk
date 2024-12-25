@@ -18,5 +18,12 @@
   "bugs": {
     "url": "https://github.com/divin3circle/fpl-sdk/issues"
   },
-  "homepage": "https://github.com/divin3circle/fpl-sdk#readme"
+  "homepage": "https://github.com/divin3circle/fpl-sdk#readme",
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "axios": "^1.7.9"
+  }
 }
