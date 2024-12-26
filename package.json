@@ -6,10 +6,9 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "tsup testWrapper/index.ts --out-dir dist/test",
+    "test": "tsup testWrapper/index.ts --out-dir dist/test && node dist/test/index.js",
     "build": "tsup src/index.ts --dts",
-    "start": "node dist/index.js",
-    "startTest": "node dist/test/index.js"
+    "start": "node dist/index.js"
   },
   "repository": {
     "type": "git",
