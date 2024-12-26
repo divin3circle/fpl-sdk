@@ -7,7 +7,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "test": "echo \"No tests yet\"",
-    "build": "tsup src/index.ts --minify",
+    "build": "tsup src/index.ts --dts",
     "start": "node dist/indx.js"
   },
   "repository": {
