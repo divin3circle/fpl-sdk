@@ -1,6 +1,7 @@
 node_modules
 
 src/*
+testWrapper/*
 tsconfig.json
 tsup.config.ts
 
