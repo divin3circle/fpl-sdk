@@ -2,7 +2,8 @@
   "name": "fpl-sdk",
   "version": "0.1.0",
   "description": "Un-official npm package for the fpl api",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
