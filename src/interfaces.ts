@@ -361,3 +361,62 @@ export interface PlayerSummary {
 }
 
 export interface Player extends Element, PlayerSummary {}
+
+/************* FIXTURES DATA ***********/
+export type StatIdentifier =
+  | "minutes"
+  | "goals_scored"
+  | "assists"
+  | "clean_sheets"
+  | "goals_conceded"
+  | "own_goals"
+  | "penalties_saved"
+  | "penalties_missed"
+  | "yellow_cards"
+  | "red_cards"
+  | "saves"
+  | "bonus"
+  | "bps";
+
+/*
+ * @notice: Interface for a player's stat score and their id
+ * @param: value - the value of the stat
+ * @param: element - the id of the player
+ */
+export interface FixtureStatMap {
+  value: number;
+  element: number;
+}
+
+/*
+ * @notice: Interface for indepth match stats of a fixture
+ * @param: identifier - the type of stat, bps, goals_scores etc
+ */
+export interface FixtureStat {
+  identifier: StatIdentifier;
+  a: FixtureStatMap[];
+  h: FixtureStatMap[];
+}
+
+/*
+ * @notice: Interface for a gameweek's fixture/event
+ */
+export interface Fixture {
+  code: number;
+  event: number;
+  finished: boolean;
+  finished_provisional: boolean;
+  id: number;
+  kickoff_time: string;
+  minutes: number;
+  provisional_start_time: boolean;
+  pulse_id: number;
+  started: boolean;
+  team_a: number;
+  team_a_score: number | null;
+  team_h: number;
+  team_h_score: number | null;
+  stats: FixtureStat[];
+  team_h_difficulty: number;
+  team_a_difficulty: number;
+}

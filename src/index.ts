@@ -1,12 +1,19 @@
 import axios from "axios";
 
-import { Bootstrap, PlayerSummary, Element, Player } from "./interfaces";
+import {
+  Bootstrap,
+  PlayerSummary,
+  Element,
+  Player,
+  Fixture,
+} from "./interfaces";
 
 /*
  * @notice: Base URL of the Fantasy Premier League API
  */
 export const BASE_URL: string = "https://fantasy.premierleague.com/api/";
 
+/************* BOOTSRAP ***********/
 /*
  * @notice: Fetch Bootstrap Static Data
  * @return: Promise<Bootstrap | null>
@@ -21,6 +28,7 @@ export async function getBootsrapStaticData(): Promise<Bootstrap | null> {
   }
 }
 
+/************* BOOTSRAP FUNCTIONS ***********/
 /*
  * @notice: Fetch a player’s detailed information divided into 3 section
  * @param: playerId: number
@@ -85,6 +93,73 @@ export async function getCombinedData(playerId: number) {
     }
   } catch (error) {
     console.error(error);
+    return null;
+  }
+}
+
+/************* FIXTURES FUNCTIONS ***********/
+/*
+ * @notice: Fetch all fixtures of the season
+ * @return: Promise<Fixture[] | null>
+ */
+export async function getAllFixtures(): Promise<Fixture[] | null> {
+  try {
+    const response = await axios.get(`${BASE_URL}fixtures/`);
+    const fixtures = response.data as Fixture[];
+    return fixtures;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+/*
+ * @notice: Fetch fixture data of a specific gameweek
+ * @param: gameweek: number
+ * @return: Promise<Fixture[] | null>
+ */
+export async function getGameWeekFixtures(
+  gameweek: number
+): Promise<Fixture[] | null> {
+  try {
+    const response = await axios.get(`${BASE_URL}fixtures/?event=${gameweek}`);
+    const fixtures = response.data as Fixture[];
+    return fixtures;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+/*
+ * @notice: Fetch all upcoming fixtures
+ * @return: Promise<Fixture[] | null>
+ */
+export async function getAllUpcomingFixtures(): Promise<Fixture[] | null> {
+  try {
+    const response = await axios.get(`${BASE_URL}fixtures?future=1`);
+    const fixtures = response.data as Fixture[];
+    return fixtures;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+/*
+ * @notice: Fetch upcoming gameweek number
+ * @return: Promise<number | null>
+ */
+export async function getUpcomingGameweekNumber(): Promise<number | null> {
+  try {
+    const fixtures = await getAllUpcomingFixtures();
+    if (fixtures) {
+      return fixtures[0].event;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.log(error);
     return null;
   }
 }
