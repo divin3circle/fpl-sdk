@@ -1,6 +1,6 @@
 {
   "name": "fpl-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Un-official npm package for the fpl api",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
