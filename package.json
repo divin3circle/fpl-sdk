@@ -6,8 +6,8 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsup",
+    "test": "echo \"No tests yet\"",
+    "build": "tsup src/index.ts --minify",
     "start": "node dist/indx.js"
   },
   "repository": {
