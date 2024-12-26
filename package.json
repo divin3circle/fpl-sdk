@@ -7,7 +7,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "test": "tsup testWrapper/index.ts --out-dir dist/test && node dist/test/index.js",
-    "build": "tsup src/index.ts --dts --mjs",
+    "build": "tsup src/index.ts --dts --format esm,cjs,iife",
     "start": "node dist/index.js"
   },
   "repository": {
