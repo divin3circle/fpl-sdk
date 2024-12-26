@@ -64,7 +64,7 @@ async function fetchPlayerBootstrapData(playerId: number) {
 fetchPlayerBootstrapData(12345); // Use the player ID
 ```
 
-### 4. Get Combined Data (Bootstrap + Element)
+### 4. Get Combined Data (Bootstrap + Element Summary)
 
 The `getCombinedData(playerId: number)` function combines both the bootstrap and element player data into a single object. This function is helpful if you want a comprehensive view of a player.
 
@@ -79,21 +79,79 @@ async function fetchCombinedPlayerData(playerId: number) {
 fetchCombinedPlayerData(12345); // Use the player ID
 ```
 
-Types
+### 5. Get Season Fixtures
+
+The `getAllFixtures` function returns all fixtures of the season Gameweek 1 - 38.
+
+```typescript
+import { getAllFixtures } from "fpl-sdk";
+
+async function fetchAllFixtures() {
+  const seasonFixtures = await getAllFixtures();
+  console.log(seasonFixtures);
+}
+
+fetchAllFixtures();
+```
+
+### 6. Get Season Fixtures
+
+The `getGameWeekFixtures(gwNumber: number)` function returns all fixtures of the season. Takes gameweek/event number(1-38).
+
+```typescript
+import { getGameWeekFixtures } from "fpl-sdk";
+
+async function fetchGameWeekFixtures() {
+  const gwFixtures = await getGameWeekFixtures(1);
+  console.log(gwFixtures);
+}
+
+fetchGameWeekFixtures();
+```
+
+### 7. Get the next gameweek/event number
+
+The `getUpcomingGameweekNumber` function returns the gameweek number of the next live gameweek.
+
+```typescript
+import { getUpcomingGameweekNumber } from "fpl-sdk";
+
+async function fetchUpcomingGameWeekNumber() {
+  const gw = await getUpcomingGameweekNumber();
+  console.log(gw);
+}
+
+fetchUpcomingGameWeekNumber();
+```
+
+### 8. Get future gameweeks
+
+The `getAllUpcomingFixtures` function returns all upcoming season fixtures sorted by kick-off time.
+
+```typescript
+import { getUpcomingGameweekNumber } from "fpl-sdk";
+
+async function fetchAllUpcomingSeasonFixtures() {
+  const upcomingFixtures = await getAllUpcomingFixtures();
+  console.log(upcomingFixtures);
+}
+
+fetchAllUpcomingSeasonFixtures();
+```
+
+```bash
+More coming soon
+```
+
+## Types
+
 This package uses TypeScript and provides the following types for the FPL data:
 
 - Bootstrap: Contains all the general FPL setup data (teams, players, etc.).
 - PlayerSummary: Contains detailed player performance data.
 - Element: The basic data for each player.
 - Player: A combined type that includes both bootstrap and element data for a player.
-
-Here are some additional functions that are planned for future updates:
-
-- Get Player Stats for a Specific Gameweek: Function to retrieve a player's points, transfers, and other statistics for a specific gameweek.
-- Get Team Information: Function to fetch data for a specific team, including their rankings, matches played, and performance.
-- Get Upcoming Fixtures: Function to retrieve upcoming fixtures for all teams or a specific team.
-- Get Top Scoring Players: A function to return the top players based on total points for the current season.
-- Get Player Form: Function to calculate a player's form over the last 5 gameweeks.
+- Fixture: Basic type for a fixture
 
 ## License
 
