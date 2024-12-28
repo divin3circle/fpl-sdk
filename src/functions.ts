@@ -28,7 +28,7 @@ export async function getBootsrapStaticData(): Promise<Bootstrap | null> {
   }
 }
 
-/************* BOOTSRAP FUNCTIONS ***********/
+/************* PLAYER FUNCTIONS ***********/
 /*
  * @notice: Fetch a player’s detailed information divided into 3 section
  * @param: playerId: number
