@@ -6,6 +6,7 @@ import {
   Element,
   Player,
   Fixture,
+  ElementSummaryUpcomingFixture,
 } from "./interfaces";
 
 /*
@@ -102,7 +103,22 @@ export async function getCombinedData(playerId: number) {
  * @param: playerId: number
  * @return: Promise<Fixture[] | null>
  */
-export async function getPlayerUpcomingFixtures(): Promise<Fixture[] | null> {}
+export async function getPlayerUpcomingFixtures(
+  playerId: number
+): Promise<ElementSummaryUpcomingFixture[] | null> {
+  try {
+    const playerSummary = await getPlayerSummary(playerId);
+    const remainingFixtures = playerSummary?.fixtures;
+    if (remainingFixtures) {
+      return remainingFixtures;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
 
 /************* FIXTURES FUNCTIONS ***********/
 /*
