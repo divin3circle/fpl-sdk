@@ -74,7 +74,7 @@ export async function getPlayerBootstrapData(
 }
 
 /*
- * @notice: Combines bootstrap & element player data f
+ * @notice: Combines bootstrap & element player data
  * @param: playerId: number
  * @return: Promise<Player | null>
  */
@@ -96,6 +96,13 @@ export async function getCombinedData(playerId: number) {
     return null;
   }
 }
+
+/*
+ * @notice: Get player's upcoming fixtures
+ * @param: playerId: number
+ * @return: Promise<Fixture[] | null>
+ */
+export async function getPlayerUpcomingFixtures(): Promise<Fixture[] | null> {}
 
 /************* FIXTURES FUNCTIONS ***********/
 /*
@@ -121,6 +128,10 @@ export async function getAllFixtures(): Promise<Fixture[] | null> {
 export async function getGameWeekFixtures(
   gameweek: number
 ): Promise<Fixture[] | null> {
+  if (gameweek < 1 || gameweek > 38) {
+    throw new Error("Gameweek number should be between 1 and 38");
+    return null;
+  }
   try {
     const response = await axios.get(`${BASE_URL}fixtures/?event=${gameweek}`);
     const fixtures = response.data as Fixture[];
