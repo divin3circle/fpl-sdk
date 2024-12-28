@@ -8,6 +8,7 @@ This package provides easy access to Fantasy Premier League (FPL) data through t
 - **Fetch Player Summary**: Retrieve detailed information about a specific player, including their performance.
 - **Fetch Player's Bootstrap Data**: Get player data directly from the bootstrap API endpoint.
 - **Combine Bootstrap & Element Data**: Combine bootstrap and player summary data into a single object for easy use.
+- **And Many More**: Check repo.
 
 ## Installation
 
