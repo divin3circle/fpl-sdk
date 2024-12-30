@@ -199,7 +199,9 @@ export async function getUpcomingGameweekNumber(): Promise<number | null> {
  * @param: gameweek: number
  * @return: Promise<GameWeekScores | null>
  */
-export async function getGameweekScores(gameweek: number) {
+export async function getGameweekScores(
+  gameweek: number
+): Promise<GameWeekScores | null> {
   if (gameweek < 1 || gameweek > 38) {
     throw new Error("Gameweek number should be between 1 and 38");
     return null;

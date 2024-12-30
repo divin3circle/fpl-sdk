@@ -1,9 +1,10 @@
-import { Fixture, Player } from "./../src/interfaces";
+import { Fixture, GameWeekScores, Player } from "./../src/interfaces";
 import {
   getAllFixtures,
   getAllUpcomingFixtures,
   getCombinedData,
   getGameWeekFixtures,
+  getGameweekScores,
   getUpcomingGameweekNumber,
 } from "../src/index";
 
@@ -19,8 +20,8 @@ const main = async () => {
   // console.log(JSON.stringify(fixtures, null, 2));
   // const allUpcomingFixtures = await getAllUpcomingFixtures();
   // console.log(JSON.stringify(allUpcomingFixtures, null, 2));
-  const gw = await getUpcomingGameweekNumber();
-  console.log(gw);
+  const gwScores: GameWeekScores | null = await getGameweekScores(19);
+  console.log(JSON.stringify(gwScores, null, 2));
 };
 
 main();
