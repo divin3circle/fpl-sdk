@@ -8,6 +8,7 @@ import {
   Fixture,
   ElementSummaryUpcomingFixture,
   GameWeekScores,
+  PlayerScore,
 } from "./interfaces";
 
 /*
@@ -193,6 +194,7 @@ export async function getUpcomingGameweekNumber(): Promise<number | null> {
 }
 
 /************* LIVE FUNCTIONS ***********/
+
 /*
  * @notice: Fetch points scores & explanations
  * of points scored by all players in a gameweek
@@ -210,6 +212,32 @@ export async function getGameweekScores(
     const response = await axios.get(`${BASE_URL}event/${gameweek}/live/`);
     const data = response.data as GameWeekScores;
     return data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+/*
+ * @notice: Fetch points scores & explanations
+ * of points scored by a players in a gameweek
+ * @param: gameweek: number
+ * @return: Promise<PlayerScore | null>
+ */
+export async function getPlayerScoreAndExplanation(
+  gameweek: number,
+  playerId: number
+): Promise<PlayerScore | null> {
+  try {
+    const gameweekscores = await getGameweekScores(gameweek);
+    const playerScore = gameweekscores?.elements.find(
+      (player) => player.id === playerId
+    );
+    if (playerScore) {
+      return playerScore;
+    } else {
+      return null;
+    }
   } catch (error) {
     console.error(error);
     return null;
