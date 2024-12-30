@@ -7,6 +7,7 @@ import {
   Player,
   Fixture,
   ElementSummaryUpcomingFixture,
+  GameWeekScores,
 } from "./interfaces";
 
 /*
@@ -196,5 +197,19 @@ export async function getUpcomingGameweekNumber(): Promise<number | null> {
  * @notice: Fetch points scores & explanations
  * of points scored by all players in a gameweek
  * @param: gameweek: number
- * @return: Promise<Element[] | null>
+ * @return: Promise<GameWeekScores | null>
  */
+export async function getGameweekScores(gameweek: number) {
+  if (gameweek < 1 || gameweek > 38) {
+    throw new Error("Gameweek number should be between 1 and 38");
+    return null;
+  }
+  try {
+    const response = await axios.get(`${BASE_URL}event/${gameweek}/live/`);
+    const data = response.data as GameWeekScores;
+    return data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
