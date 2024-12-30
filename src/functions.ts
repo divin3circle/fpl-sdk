@@ -193,7 +193,7 @@ export async function getUpcomingGameweekNumber(): Promise<number | null> {
   }
 }
 
-/************* LIVE FUNCTIONS ***********/
+/************* LIVE GAMEWEEK FUNCTIONS ***********/
 
 /*
  * @notice: Fetch points scores & explanations
