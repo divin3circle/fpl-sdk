@@ -9,6 +9,7 @@ import {
   ElementSummaryUpcomingFixture,
   GameWeekScores,
   PlayerScore,
+  Manager,
 } from "./interfaces";
 
 /*
@@ -238,6 +239,24 @@ export async function getPlayerScoreAndExplanation(
     } else {
       return null;
     }
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+/************* MANAGER FUNCTIONS ***********/
+/*
+ * @notice: Fetch manager data
+ * @param: managerId: number
+ * @return: Promise<Manager | null>
+ */
+export async function getManagerData(
+  managerId: number
+): Promise<Manager | null> {
+  try {
+    const response = await axios.get(`${BASE_URL}entry/${managerId}/`);
+    return response.data as Manager;
   } catch (error) {
     console.error(error);
     return null;
