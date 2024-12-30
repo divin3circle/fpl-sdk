@@ -399,7 +399,7 @@ export interface FixtureStat {
 }
 
 /*
- * @notice: Interface for a gameweek's fixture/event
+ * @notice: Interface for a players's scores in a fixture
  */
 export interface Fixture {
   code: number;
@@ -419,4 +419,62 @@ export interface Fixture {
   stats: FixtureStat[];
   team_h_difficulty: number;
   team_a_difficulty: number;
+}
+
+export interface Stats {
+  identifier: StatIdentifier;
+  points: number;
+  value: number;
+  points_modification: number;
+}
+
+/*
+ * @notice: Interface for a player's explained
+ * point score in a fixture
+ */
+export interface LiveElementExplain {
+  fixture: number;
+  stats: Stats[];
+}
+
+/*
+ * @notice: Interface for a player's stats
+ * in a particular fixture
+ */
+export interface LiveElementStats {
+  minutes: number;
+  goals_scored: number;
+  assists: number;
+  clean_sheets: number;
+  goals_conceded: number;
+  own_goals: number;
+  penalties_saved: number;
+  penalties_missed: number;
+  yellow_cards: number;
+  red_cards: number;
+  saves: number;
+  bonus: number;
+  bps: number;
+  influence: string;
+  creativity: string;
+  threat: string;
+  ict_index: string;
+  total_points: number;
+  in_dreamteam: boolean;
+}
+/*
+ * @notice: Interface for a player's fantasy scores
+ * in a particular gameweek
+ */
+export interface PlayerScore {
+  id: number;
+  stats: LiveElementStats;
+  explain: LiveElementExplain[];
+}
+/*
+ * @notice: Interface for a gameweek's fantasy scores
+ * for all the players in the league
+ */
+export interface GameWeekScores {
+  elements: PlayerScore[];
 }

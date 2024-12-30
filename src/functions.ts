@@ -190,3 +190,11 @@ export async function getUpcomingGameweekNumber(): Promise<number | null> {
     return null;
   }
 }
+
+/************* LIVE FUNCTIONS ***********/
+/*
+ * @notice: Fetch points scores & explanations
+ * of points scored by all players in a gameweek
+ * @param: gameweek: number
+ * @return: Promise<Element[] | null>
+ */
