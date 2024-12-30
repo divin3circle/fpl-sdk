@@ -478,3 +478,135 @@ export interface PlayerScore {
 export interface GameWeekScores {
   elements: PlayerScore[];
 }
+
+/************* MANAGER DATA ***********/
+export interface CupMatch {
+  id: number;
+  entry_1_entry: number;
+  entry_1_name: string;
+  entry_1_player_name: string;
+  entry_1_points: number;
+  entry_1_win: number;
+  entry_1_draw: number;
+  entry_1_loss: number;
+  entry_1_total: number;
+  entry_2_entry: number;
+  entry_2_name: string;
+  entry_2_player_name: string;
+  entry_2_points: number;
+  entry_2_win: number;
+  entry_2_draw: number;
+  entry_2_loss: number;
+  entry_2_total: number;
+  is_knockout: boolean;
+  winner: number;
+  seed_value: null;
+  event: number;
+  tiebreak: null;
+}
+
+export interface EntryCupStatus {
+  qualification_event: number | null;
+  qualification_numbers: number | null;
+  qualification_rank: number | null;
+  qualification_state: "QUALIFIED" | "NOT_QUALIFIED_RANK" | null;
+}
+
+export interface EntryCup {
+  cup_league: null;
+  matches: CupMatch[];
+  status: EntryCupStatus;
+}
+
+interface EntryLeagueInfo {
+  id: number;
+  cup_league: null;
+  cup_qualified: boolean | null;
+  has_cup: boolean;
+  name: string;
+  short_name: string | null;
+  created: string;
+  closed: boolean;
+  rank: null | number;
+  max_entries: null | number;
+  league_type: LeagueType;
+  admin_entry: null | number;
+  start_event: number;
+  entry_rank: number;
+  entry_last_rank: number;
+  entry_can_leave: boolean;
+  entry_can_admin: boolean;
+  entry_can_invite: boolean;
+}
+
+export interface EntryClassicLeague extends EntryLeagueInfo {
+  scoring: "c";
+}
+
+export interface EntryH2HLeague extends EntryLeagueInfo {
+  scoring: "h";
+}
+interface EntryCupMatches {
+  id: number;
+  entry_1_entry: number;
+  entry_1_name: string;
+  entry_1_player_name: string;
+  entry_1_points: number;
+  entry_1_win: number;
+  entry_1_draw: number;
+  entry_1_loss: number;
+  entry_1_total: number;
+  entry_2_entry: number;
+  entry_2_name: string;
+  entry_2_player_name: string;
+  entry_2_points: number;
+  entry_2_win: number;
+  entry_2_draw: number;
+  entry_2_loss: number;
+  entry_2_total: number;
+  is_knockout: boolean;
+  league: number;
+  winner: string | null;
+  seed_value: number | null;
+  event: number;
+  tiebreak: string | null;
+  is_bye: boolean;
+  knockout_name: string;
+}
+
+/*
+ * @notice: Interface for a manager's leagues
+ */
+export interface EntryLeagues {
+  classic: EntryClassicLeague[];
+  h2h: EntryH2HLeague[];
+  cup: EntryCup;
+  cup_matches: EntryCupMatches[];
+}
+/*
+ * @notice: Interface for a manager's info
+ */
+export interface Manager {
+  id: number;
+  joined_time: string;
+  started_event: number;
+  favourite_team: number;
+  player_first_name: string;
+  player_last_name: string;
+  player_region_id: number;
+  player_region_name: string;
+  player_region_iso_code_short: string;
+  player_region_iso_code_long: string;
+  summary_overall_points: number | null;
+  summary_overall_rank: number | null;
+  summary_event_points: number | null;
+  summary_event_rank: number | null;
+  current_event: number | null;
+  leagues: EntryLeagues;
+  name: string;
+  kit: null | string;
+  name_change_blocked: boolean;
+  last_deadline_bank: number | null;
+  last_deadline_value: number | null;
+  last_deadline_total_transfers: number;
+}
