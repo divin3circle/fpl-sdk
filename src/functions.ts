@@ -10,6 +10,8 @@ import {
   GameWeekScores,
   PlayerScore,
   Manager,
+  ManagerHistory,
+  ClassicLeagueStandings,
 } from "./interfaces";
 
 /*
@@ -257,6 +259,38 @@ export async function getManagerData(
   try {
     const response = await axios.get(`${BASE_URL}entry/${managerId}/`);
     return response.data as Manager;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+/*
+ * @notice: Fetch manager history
+ * @param: managerId: number
+ * @return: Promise<ManagerHistory | null>
+ */
+export async function getManagerHistory(
+  managerId: number
+): Promise<ManagerHistory | null> {
+  try {
+    const response = await axios.get(`${BASE_URL}entry/${managerId}/history/`);
+    return response.data as ManagerHistory;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function getClassicLeagueStanding(
+  leagueId: number
+): Promise<ClassicLeagueStandings | null> {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}leagues-classic/${leagueId}/standings/`
+    );
+    const data = response.data as ClassicLeagueStandings;
+    return data;
   } catch (error) {
     console.error(error);
     return null;

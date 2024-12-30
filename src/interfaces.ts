@@ -610,3 +610,118 @@ export interface Manager {
   last_deadline_value: number | null;
   last_deadline_total_transfers: number;
 }
+
+export interface ManagerChipPlay {
+  event: number;
+  name: ChipName;
+  time: string;
+}
+
+export interface ManagerEventHistory {
+  bank: number;
+  event: number;
+  event_transfers: number;
+  event_transfers_cost: number;
+  overall_rank: number;
+  points: number;
+  points_on_bench: number;
+  rank: number;
+  rank_sort: number;
+  total_points: number;
+  value: number;
+}
+
+export interface ManagerSeasonHistory {
+  rank: number;
+  season_name: string;
+  total_points: number;
+}
+
+export interface ManagerHistory {
+  chips: ManagerChipPlay[];
+  current: ManagerEventHistory[];
+  past: ManagerSeasonHistory[];
+}
+
+/************* LEAGUE DATA ***********/
+interface NewEntries {
+  has_next: boolean;
+  page: number;
+  results: any[];
+}
+
+interface ManagerClassicLeague {
+  id: number;
+  name: string;
+  created: string;
+  closed: boolean;
+  max_entries: number | null;
+  league_type: string;
+  scoring: string;
+  admin_entry: number;
+  start_event: number;
+  code_privacy: string;
+  has_cup: boolean;
+  cup_league: number | null;
+  rank: number | null;
+}
+interface Standing {
+  id: number;
+  event_total: number;
+  player_name: string;
+  rank: number;
+  last_rank: number;
+  rank_sort: number;
+  total: number;
+  entry: number;
+  entry_name: string;
+  has_played: boolean;
+}
+
+interface ManagerClassicLeagueStanding {
+  has_next: boolean;
+  page: number;
+  results: Standing[];
+}
+
+export interface ClassicLeagueStandings {
+  new_entries: NewEntries;
+  last_updated_data: string;
+  league: ManagerClassicLeague;
+  standings: ManagerClassicLeagueStanding[];
+}
+
+export interface Chip {
+  status_for_entry: "played" | "available";
+  played_by_entry: number[];
+  name: ChipName;
+  number: number;
+  start_event: number;
+  stop_event: number;
+  chip_type: "transfer" | "team";
+}
+
+export interface Pick {
+  element: number;
+  position: number;
+  selling_price: number;
+  multiplier: number;
+  purchase_price: number;
+  is_captain: boolean;
+  is_vice_captain: boolean;
+}
+
+export interface Transfers {
+  cost: number;
+  status: "cost";
+  limit: number;
+  made: number;
+  bank: number;
+  value: number;
+}
+
+export interface ManagerPersonalInfo {
+  picks: Pick[];
+  chips: Chip[];
+  transfers: Transfers;
+}

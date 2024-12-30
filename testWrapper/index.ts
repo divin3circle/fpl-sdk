@@ -8,6 +8,7 @@ import {
 import {
   getAllFixtures,
   getAllUpcomingFixtures,
+  getClassicLeagueStanding,
   getCombinedData,
   getGameWeekFixtures,
   getGameweekScores,
@@ -35,8 +36,10 @@ const main = async () => {
   //   PLAYER_ID
   // );
   // console.log(JSON.stringify(playerScore, null, 2));
-  const manager: Manager | null = await getManagerData(565066);
-  console.log(JSON.stringify(manager, null, 2));
+  // const manager: Manager | null = await getManagerData(3105429);
+  // console.log(JSON.stringify(manager, null, 2));
+  const lgStanding = await getClassicLeagueStanding(1346286);
+  console.log(JSON.stringify(lgStanding, null, 2));
 };
 
 main();
