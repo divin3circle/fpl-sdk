@@ -28,56 +28,39 @@ const AUTH_URL = "https://users.premierleague.com/accounts/login/";
  * @param: password: string
  * @return: Promise<AxiosInstance | null>
  */
-
 export async function authenticate(
   email: string,
   password: string
-): Promise<Axios.AxiosInstance | null> {
-  const headers = {
-    authority: "users.premierleague.com",
-    "cache-control": "max-age=0",
-    "upgrade-insecure-requests": "1",
-    origin: "https://fantasy.premierleague.com",
-    "content-type": "application/x-www-form-urlencoded",
-    "user-agent":
-      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36",
-    accept:
-      "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-    "sec-fetch-site": "same-site",
-    "sec-fetch-mode": "navigate",
-    "sec-fetch-user": "?1",
-    "sec-fetch-dest": "document",
-    referer: "https://fantasy.premierleague.com/my-team",
-    "accept-language": "en-US,en;q=0.9",
-  };
-
-  const payload = new URLSearchParams({
-    login: email,
-    password: password,
-    app: "plfpl-web",
-    redirect_uri: "https://fantasy.premierleague.com/",
-  }).toString();
-
-  const session: Axios.AxiosInstance = axios.create({
-    withCredentials: true,
-  });
+): Promise<string | null> {
+  const browser = await puppeteer.launch({ headless: false });
+  const page = await browser.newPage();
 
   try {
-    const response = await session.post(AUTH_URL, payload, { headers });
+    await page.goto("https://users.premierleague.com/accounts/login/");
 
-    if (response.status === 200) {
-      console.log("Authentication successful.");
-      return session;
+    await page.type('input[name="login"]', email);
+    await page.type('input[name="password"]', password);
+
+    await page.click('button[type="submit"]');
+    await page.waitForNavigation();
+
+    const cookies = await page.cookies();
+    const plProfileCookie = cookies.find(
+      (cookie) => cookie.name === "pl_profile"
+    );
+
+    if (plProfileCookie) {
+      console.log("Login successful, cookie:", plProfileCookie.value);
+      return plProfileCookie.value;
     } else {
-      console.error("Login failed with status:", response.status);
+      console.error("Login failed, no pl_profile cookie found.");
       return null;
     }
   } catch (error: any) {
-    console.error(
-      "Authentication failed:",
-      error.response?.data || error.message
-    );
+    console.error("Authentication failed:", error.message);
     return null;
+  } finally {
+    await browser.close();
   }
 }
 
