@@ -36,18 +36,20 @@ export async function authenticate(
   const page = await browser.newPage();
 
   try {
-    await page.goto("https://users.premierleague.com/accounts/login/");
+    await page.goto("https://fantasy.premierleague.com/", {
+      waitUntil: "networkidle0",
+    });
+    await page.type("#loginUsername", email);
 
-    await page.type("#login", email);
-    await page.type("#password", password);
+    await page.type("#loginLoginWrap", password);
 
     await Promise.all([
-      page.click("#login-button"),
+      page.click('button[type="submit"]'),
       page.waitForNavigation({ waitUntil: "networkidle0" }),
     ]);
 
     // Check if login was successful
-    if (page.url().includes("dashboard")) {
+    if (page.url().includes("entry")) {
       const cookies = await page.cookies();
       await browser.close();
       return JSON.stringify(cookies);
