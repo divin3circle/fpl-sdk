@@ -19,6 +19,7 @@ import {
  * @notice: Base URL of the Fantasy Premier League API
  */
 export const BASE_URL: string = "https://fantasy.premierleague.com/api/";
+const AUTH_URL = "https://users.premierleague.com/accounts/login/";
 
 /************* AUTHENTICATION ***********/
 /*
@@ -31,36 +32,53 @@ export const BASE_URL: string = "https://fantasy.premierleague.com/api/";
 export async function authenticate(
   email: string,
   password: string
-): Promise<string | null> {
-  const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
+): Promise<Axios.AxiosInstance | null> {
+  const headers = {
+    authority: "users.premierleague.com",
+    "cache-control": "max-age=0",
+    "upgrade-insecure-requests": "1",
+    origin: "https://fantasy.premierleague.com",
+    "content-type": "application/x-www-form-urlencoded",
+    "user-agent":
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36",
+    accept:
+      "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+    "sec-fetch-site": "same-site",
+    "sec-fetch-mode": "navigate",
+    "sec-fetch-user": "?1",
+    "sec-fetch-dest": "document",
+    referer: "https://fantasy.premierleague.com/my-team",
+    "accept-language": "en-US,en;q=0.9",
+  };
+
+  const payload = new URLSearchParams({
+    login: email,
+    password: password,
+    app: "plfpl-web",
+    redirect_uri: "https://fantasy.premierleague.com/",
+  }).toString();
+
+  // Create a session to maintain cookies
+  const session: Axios.AxiosInstance = axios.create({
+    withCredentials: true, // Enable cookies
+  });
 
   try {
-    await page.goto("https://fantasy.premierleague.com/", {
-      waitUntil: "networkidle0",
-    });
-    await page.type("#loginUsername", email);
+    // Login request
+    const response = await session.post(AUTH_URL, payload, { headers });
 
-    await page.type("#loginLoginWrap", password);
-
-    await Promise.all([
-      page.click('button[type="submit"]'),
-      page.waitForNavigation({ waitUntil: "networkidle0" }),
-    ]);
-
-    // Check if login was successful
-    if (page.url().includes("entry")) {
-      const cookies = await page.cookies();
-      await browser.close();
-      return JSON.stringify(cookies);
+    if (response.status === 200) {
+      console.log("Authentication successful.");
+      return session; // Return the session with cookies
     } else {
-      console.error("Login failed");
-      await browser.close();
+      console.error("Login failed with status:", response.status);
       return null;
     }
-  } catch (error) {
-    console.error("Authentication failed:", error);
-    await browser.close();
+  } catch (error: any) {
+    console.error(
+      "Authentication failed:",
+      error.response?.data || error.message
+    );
     return null;
   }
 }
