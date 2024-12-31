@@ -58,13 +58,11 @@ export async function authenticate(
     redirect_uri: "https://fantasy.premierleague.com/",
   }).toString();
 
-  // Create a session to maintain cookies
   const session: Axios.AxiosInstance = axios.create({
-    withCredentials: true, // Enable cookies
+    withCredentials: true,
   });
 
   try {
-    // Login request
     const response = await session.post(AUTH_URL, payload, { headers });
 
     if (response.status === 200) {
