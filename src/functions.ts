@@ -1,9 +1,9 @@
 import axios from "axios";
-import puppeteer, { Browser, Page, Cookie } from "puppeteer";
+import { Browser, Page, Cookie } from "puppeteer";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
+import puppeteer from "puppeteer-extra";
+puppeteer.use(StealthPlugin());
 
-function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 import {
   Bootstrap,
   PlayerSummary,
@@ -50,20 +50,36 @@ export async function authenticate(): Promise<Cookie[] | null> {
   const page: Page = await browser.newPage();
 
   try {
+    // Navigate to the login page
     await page.goto("https://users.premierleague.com/accounts/login/", {
       waitUntil: "networkidle2",
     });
 
     console.log("Please log in manually in the browser window.");
 
-    // Wait for the user to log in and navigate to the dashboard
-    // Adjust the URL to check for a specific page after login
-    await page.waitForNavigation({
-      waitUntil: "networkidle2",
-      timeout: 300000, // 5 minutes to allow manual login
-    });
+    // Wait for the user to log in and be redirected to the correct page
+    const maxWaitTime = 300000; // 5 minutes
+    const checkInterval = 1000; // Check every second
+    let elapsedTime = 0;
 
-    // Fetch cookies after successful login
+    while (elapsedTime < maxWaitTime) {
+      const currentURL = page.url();
+      console.log("Current URL:", currentURL); // For debugging
+      if (currentURL.includes("entry")) {
+        console.log("User successfully logged in. Redirected to:", currentURL);
+        break;
+      }
+      await new Promise((resolve) => setTimeout(resolve, checkInterval));
+      elapsedTime += checkInterval;
+    }
+
+    // If the URL doesn't contain 'entry', return an error
+    if (elapsedTime >= maxWaitTime) {
+      console.error("Timeout reached. User did not log in successfully.");
+      return null;
+    }
+
+    // Fetch cookies after successful login and redirection
     const cookies = await page.cookies();
     if (cookies) {
       console.log("Login successful. Cookies retrieved:", cookies);
