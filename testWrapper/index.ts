@@ -6,6 +6,7 @@ import {
   PlayerScore,
 } from "./../src/interfaces";
 import {
+  authenticate,
   getAllFixtures,
   getAllUpcomingFixtures,
   getClassicLeagueStanding,
@@ -19,6 +20,8 @@ import {
 
 const PLAYER_ID = 351; // Erling Haaland
 const GAMEWEEK = 18;
+const MAIL = "silasabel330@gmail.com";
+const PASSWORD = "Sam@2002";
 
 const main = async () => {
   // const player: Player | null = await getCombinedData(PLAYER_ID);
@@ -38,8 +41,10 @@ const main = async () => {
   // console.log(JSON.stringify(playerScore, null, 2));
   // const manager: Manager | null = await getManagerData(3105429);
   // console.log(JSON.stringify(manager, null, 2));
-  const lgStanding = await getClassicLeagueStanding(1346286);
-  console.log(JSON.stringify(lgStanding, null, 2));
+  // const lgStanding = await getClassicLeagueStanding(1346286);
+  // console.log(JSON.stringify(lgStanding, null, 2));
+  const cookie = await authenticate(MAIL, PASSWORD);
+  console.log(cookie);
 };
 
 main();

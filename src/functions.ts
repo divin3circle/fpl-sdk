@@ -26,6 +26,7 @@ export const BASE_URL: string = "https://fantasy.premierleague.com/api/";
  * @param: password: string
  * @return: Promise<AxiosInstance | null>
  */
+
 export async function authenticate(
   email: string,
   password: string
@@ -37,18 +38,27 @@ export async function authenticate(
     app: "plfpl-web",
   };
 
-  const session: Axios.AxiosInstance = axios.create({
+  const session = axios.create({
     withCredentials: true,
+    headers: {
+      "Content-Type": "application/json",
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+    },
   });
 
   try {
-    await session.post(
+    const response = await session.post(
       "https://users.premierleague.com/accounts/login/",
       payload
     );
+    console.log("Authentication successful:", response.status);
     return session;
   } catch (error: any) {
-    console.error("Authentication failed:", error.message);
+    console.error(
+      "Authentication failed:",
+      error.response ? error.response.data : error.message
+    );
     return null;
   }
 }
