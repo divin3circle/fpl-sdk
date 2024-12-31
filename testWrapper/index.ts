@@ -43,7 +43,7 @@ const main = async () => {
   // console.log(JSON.stringify(manager, null, 2));
   // const lgStanding = await getClassicLeagueStanding(1346286);
   // console.log(JSON.stringify(lgStanding, null, 2));
-  const cookie = await authenticate(MAIL, PASSWORD);
+  const cookie = await authenticate();
   console.log(cookie);
 };
 

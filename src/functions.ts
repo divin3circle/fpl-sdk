@@ -1,9 +1,6 @@
 import axios from "axios";
-import puppeteer from "puppeteer-extra";
-import StealthPlugin from "puppeteer-extra-plugin-stealth";
-import { Browser, Page, Cookie } from "puppeteer";
+import puppeteer, { Browser, Page, Cookie } from "puppeteer";
 
-puppeteer.use(StealthPlugin());
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -25,7 +22,6 @@ import {
  * @notice: Base URL of the Fantasy Premier League API
  */
 export const BASE_URL: string = "https://fantasy.premierleague.com/api/";
-const AUTH_URL = "https://users.premierleague.com/accounts/login/";
 
 /************* AUTHENTICATION ***********/
 /*
@@ -34,65 +30,46 @@ const AUTH_URL = "https://users.premierleague.com/accounts/login/";
  * @param: password: string
  * @return: Promise<AxiosInstance | null>
  */
-async function getFreeProxy(): Promise<string | null> {
-  try {
-    const response = await axios.get<string>(
-      "https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=1000&country=all"
-    );
-    const proxies = response.data.split("\n").filter(Boolean);
-    const randomProxy = proxies[Math.floor(Math.random() * proxies.length)];
-    console.log("Using proxy:", randomProxy);
-    return randomProxy;
-  } catch (error: any) {
-    console.error("Failed to fetch proxy:", error.message);
-    return null;
-  }
-}
+// async function getFreeProxy(): Promise<string | null> {
+//   try {
+//     const response = await axios.get<string>(
+//       "https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=1000&country=all"
+//     );
+//     const proxies = response.data.split("\n").filter(Boolean);
+//     const randomProxy = proxies[Math.floor(Math.random() * proxies.length)];
+//     console.log("Using proxy:", randomProxy);
+//     return randomProxy;
+//   } catch (error: any) {
+//     console.error("Failed to fetch proxy:", error.message);
+//     return null;
+//   }
+// }
 
-export async function authenticate(
-  email: string,
-  password: string
-): Promise<Cookie[] | null> {
-  const proxy = await getFreeProxy();
-  if (!proxy) {
-    console.error("No proxy available, cannot proceed.");
-    return null;
-  }
-  const browser: Browser = await puppeteer.launch({
-    headless: false,
-    // args: [`--proxy-server=${proxy}`],
-  });
-
+export async function authenticate(): Promise<Cookie[] | null> {
+  const browser: Browser = await puppeteer.launch({ headless: false });
   const page: Page = await browser.newPage();
 
   try {
-    // Navigate to the login page
     await page.goto("https://users.premierleague.com/accounts/login/", {
       waitUntil: "networkidle2",
     });
-    await delay(Math.random() * 3000 + 2000);
 
-    await page.waitForSelector('input[name="login"]', { timeout: 70000 });
-    await page.type('input[name="login"]', email);
+    console.log("Please log in manually in the browser window.");
 
-    await delay(Math.random() * 3000 + 2000);
-    await page.type('input[name="password"]', password);
+    // Wait for the user to log in and navigate to the dashboard
+    // Adjust the URL to check for a specific page after login
+    await page.waitForNavigation({
+      waitUntil: "networkidle2",
+      timeout: 300000, // 5 minutes to allow manual login
+    });
 
-    await delay(Math.random() * 3000 + 2000);
-    await page.click('button[type="submit"]');
-
-    await page.waitForNavigation({ waitUntil: "networkidle2" });
-
+    // Fetch cookies after successful login
     const cookies = await page.cookies();
-    const plProfileCookie = cookies.find(
-      (cookie) => cookie.name === "pl_profile"
-    );
-
     if (cookies) {
-      console.log("Login successful, cookie:", cookies);
+      console.log("Login successful. Cookies retrieved:", cookies);
       return cookies;
     } else {
-      console.error("Login failed, no pl_profile cookie found.");
+      console.error("No cookies found. Login might have failed.");
       return null;
     }
   } catch (error: any) {
