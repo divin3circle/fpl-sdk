@@ -1,6 +1,12 @@
 import axios from "axios";
-import puppeteer, { Cookie } from "puppeteer";
+import puppeteer from "puppeteer-extra";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
+import { Browser, Page, Cookie } from "puppeteer";
 
+puppeteer.use(StealthPlugin());
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 import {
   Bootstrap,
   PlayerSummary,
@@ -28,34 +34,70 @@ const AUTH_URL = "https://users.premierleague.com/accounts/login/";
  * @param: password: string
  * @return: Promise<AxiosInstance | null>
  */
+async function getFreeProxy(): Promise<string | null> {
+  try {
+    const response = await axios.get<string>(
+      "https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=1000&country=all"
+    );
+    const proxies = response.data.split("\n").filter(Boolean);
+    const randomProxy = proxies[Math.floor(Math.random() * proxies.length)];
+    console.log("Using proxy:", randomProxy);
+    return randomProxy;
+  } catch (error: any) {
+    console.error("Failed to fetch proxy:", error.message);
+    return null;
+  }
+}
+
 export async function authenticate(
   email: string,
   password: string
-): Promise<Cookie[] | undefined> {
-  const browser = await puppeteer.launch({ headless: false });
-  const page = await browser.newPage();
+): Promise<Cookie[] | null> {
+  const proxy = await getFreeProxy();
+  if (!proxy) {
+    console.error("No proxy available, cannot proceed.");
+    return null;
+  }
+  const browser: Browser = await puppeteer.launch({
+    headless: false,
+    // args: [`--proxy-server=${proxy}`],
+  });
+
+  const page: Page = await browser.newPage();
 
   try {
-    await page.goto("https://users.premierleague.com/accounts/login/");
+    // Navigate to the login page
+    await page.goto("https://users.premierleague.com/accounts/login/", {
+      waitUntil: "networkidle2",
+    });
+    await delay(Math.random() * 3000 + 2000);
 
+    await page.waitForSelector('input[name="login"]', { timeout: 70000 });
     await page.type('input[name="login"]', email);
+
+    await delay(Math.random() * 3000 + 2000);
     await page.type('input[name="password"]', password);
 
+    await delay(Math.random() * 3000 + 2000);
     await page.click('button[type="submit"]');
-    await page.waitForNavigation();
+
+    await page.waitForNavigation({ waitUntil: "networkidle2" });
 
     const cookies = await page.cookies();
+    const plProfileCookie = cookies.find(
+      (cookie) => cookie.name === "pl_profile"
+    );
 
     if (cookies) {
       console.log("Login successful, cookie:", cookies);
       return cookies;
     } else {
       console.error("Login failed, no pl_profile cookie found.");
-      return undefined;
+      return null;
     }
   } catch (error: any) {
     console.error("Authentication failed:", error.message);
-    return undefined;
+    return null;
   } finally {
     await browser.close();
   }
