@@ -1,4 +1,5 @@
 import axios from "axios";
+import puppeteer from "puppeteer";
 
 import {
   Bootstrap,
@@ -30,35 +31,34 @@ export const BASE_URL: string = "https://fantasy.premierleague.com/api/";
 export async function authenticate(
   email: string,
   password: string
-): Promise<Axios.AxiosInstance | null> {
-  const payload = {
-    login: email,
-    password: password,
-    redirect_uri: "https://fantasy.premierleague.com/a/login",
-    app: "plfpl-web",
-  };
-
-  const session = axios.create({
-    withCredentials: true,
-    headers: {
-      "Content-Type": "application/json",
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
-    },
-  });
+): Promise<string | null> {
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
 
   try {
-    const response = await session.post(
-      "https://users.premierleague.com/accounts/login/",
-      payload
-    );
-    console.log("Authentication successful:", response.status);
-    return session;
-  } catch (error: any) {
-    console.error(
-      "Authentication failed:",
-      error.response ? error.response.data : error.message
-    );
+    await page.goto("https://users.premierleague.com/accounts/login/");
+
+    await page.type("#login", email);
+    await page.type("#password", password);
+
+    await Promise.all([
+      page.click("#login-button"),
+      page.waitForNavigation({ waitUntil: "networkidle0" }),
+    ]);
+
+    // Check if login was successful
+    if (page.url().includes("dashboard")) {
+      const cookies = await page.cookies();
+      await browser.close();
+      return JSON.stringify(cookies);
+    } else {
+      console.error("Login failed");
+      await browser.close();
+      return null;
+    }
+  } catch (error) {
+    console.error("Authentication failed:", error);
+    await browser.close();
     return null;
   }
 }
