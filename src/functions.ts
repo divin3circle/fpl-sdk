@@ -1,5 +1,5 @@
 import axios from "axios";
-import puppeteer from "puppeteer";
+import puppeteer, { Cookie } from "puppeteer";
 
 import {
   Bootstrap,
@@ -31,7 +31,7 @@ const AUTH_URL = "https://users.premierleague.com/accounts/login/";
 export async function authenticate(
   email: string,
   password: string
-): Promise<string | null> {
+): Promise<Cookie[] | undefined> {
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
 
@@ -45,20 +45,17 @@ export async function authenticate(
     await page.waitForNavigation();
 
     const cookies = await page.cookies();
-    const plProfileCookie = cookies.find(
-      (cookie) => cookie.name === "pl_profile"
-    );
 
-    if (plProfileCookie) {
-      console.log("Login successful, cookie:", plProfileCookie.value);
-      return plProfileCookie.value;
+    if (cookies) {
+      console.log("Login successful, cookie:", cookies);
+      return cookies;
     } else {
       console.error("Login failed, no pl_profile cookie found.");
-      return null;
+      return undefined;
     }
   } catch (error: any) {
     console.error("Authentication failed:", error.message);
-    return null;
+    return undefined;
   } finally {
     await browser.close();
   }
