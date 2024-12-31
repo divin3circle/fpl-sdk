@@ -26,7 +26,7 @@ export const BASE_URL: string = "https://fantasy.premierleague.com/api/";
  * @param: password: string
  * @return: Promise<AxiosInstance | null>
  */
-async function authenticate(
+export async function authenticate(
   email: string,
   password: string
 ): Promise<Axios.AxiosInstance | null> {
