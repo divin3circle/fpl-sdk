@@ -19,6 +19,40 @@ import {
  */
 export const BASE_URL: string = "https://fantasy.premierleague.com/api/";
 
+/************* AUTHENTICATION ***********/
+/*
+ * @notice: Authenticate user using email and password
+ * @param: email: string
+ * @param: password: string
+ * @return: Promise<AxiosInstance | null>
+ */
+async function authenticate(
+  email: string,
+  password: string
+): Promise<Axios.AxiosInstance | null> {
+  const payload = {
+    login: email,
+    password: password,
+    redirect_uri: "https://fantasy.premierleague.com/a/login",
+    app: "plfpl-web",
+  };
+
+  const session: Axios.AxiosInstance = axios.create({
+    withCredentials: true,
+  });
+
+  try {
+    await session.post(
+      "https://users.premierleague.com/accounts/login/",
+      payload
+    );
+    return session;
+  } catch (error: any) {
+    console.error("Authentication failed:", error.message);
+    return null;
+  }
+}
+
 /************* BOOTSRAP ***********/
 /*
  * @notice: Fetch Bootstrap Static Data
