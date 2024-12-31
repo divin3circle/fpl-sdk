@@ -67,7 +67,7 @@ export async function authenticate(
 
     if (response.status === 200) {
       console.log("Authentication successful.");
-      return session; // Return the session with cookies
+      return session;
     } else {
       console.error("Login failed with status:", response.status);
       return null;
