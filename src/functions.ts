@@ -188,6 +188,9 @@ export async function getCombinedData(playerId: number) {
 export async function getPlayerUpcomingFixtures(
   playerId: number
 ): Promise<ElementSummaryUpcomingFixture[] | null> {
+  if (playerId > 400) {
+    return null;
+  }
   try {
     const playerSummary = await getPlayerSummary(playerId);
     const remainingFixtures = playerSummary?.fixtures;
