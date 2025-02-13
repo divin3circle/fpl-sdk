@@ -25,25 +25,26 @@ export const BASE_URL: string = "https://fantasy.premierleague.com/api/";
 
 /************* AUTHENTICATION ***********/
 /*
+ * @notice: BETA
  * @notice: Authenticate user using email and password
  * @param: email: string
  * @param: password: string
  * @return: Promise<AxiosInstance | null>
  */
-// async function getFreeProxy(): Promise<string | null> {
-//   try {
-//     const response = await axios.get<string>(
-//       "https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=1000&country=all"
-//     );
-//     const proxies = response.data.split("\n").filter(Boolean);
-//     const randomProxy = proxies[Math.floor(Math.random() * proxies.length)];
-//     console.log("Using proxy:", randomProxy);
-//     return randomProxy;
-//   } catch (error: any) {
-//     console.error("Failed to fetch proxy:", error.message);
-//     return null;
-//   }
-// }
+async function getFreeProxy(): Promise<string | null> {
+  try {
+    const response = await axios.get<string>(
+      "https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=1000&country=all"
+    );
+    const proxies = response.data.split("\n").filter(Boolean);
+    const randomProxy = proxies[Math.floor(Math.random() * proxies.length)];
+    console.log("Using proxy:", randomProxy);
+    return randomProxy;
+  } catch (error: any) {
+    console.error("Failed to fetch proxy:", error.message);
+    return null;
+  }
+}
 
 export async function authenticate(): Promise<Cookie[] | null> {
   const browser: Browser = await puppeteer.launch({ headless: false });
